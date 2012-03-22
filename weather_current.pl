@@ -41,7 +41,7 @@ my $_ = substr($content,$indexOfStart,$indexOfEnd - $indexOfStart);
 #s/<.+?>//g;
 #s/\s+/ /g;
 
-@keys = ("Temperature","WindDirection","WindSpeedLow","WindSpeedHigh","BaroPressure","Preceipitation"$
+@keys = ("Temperature","WindDirection","WindSpeedLow","WindSpeedHigh","BaroPressure","Preceipitation","Lightning","QueryTime");
 
 my $n = 0;
 my $indexValue = index($_,"<td class=\"value\"", 0);
