@@ -50,7 +50,7 @@ for(; $indexValue != -1;)
    my $indexValueStart = index($_,">",$indexValue)+1;
    my $indexValueEnd = index($_,"<",$indexValue+2);
 
-   my $temp = $keys[$n];
+   my $temp =  $keys[$n];
    #print "debug: " . $temp;
    if ($temp eq "WindDirection") {
      #god damned wind direction
@@ -92,6 +92,63 @@ for(; $indexValue != -1;)
 }
 
 $data{WindSpeedAvg} = ($data{WindSpeedHigh} + $data{WindSpeedLow}) / 2;
+
+#######
+# now for the historical
+#######
+$httpaddr = "http://www.weatheroffice.gc.ca/almanac/almanac_e.html?yyc";
+my @units;
+
+do{
+  eval {
+    local $SIG{ALRM} = sub { die "alarm\n" };
+    alarm $timeout;
+    $tries++;
+    $content = LWP::Simple::get($httpaddr);
+    alarm 0;
+  };
+} while (!$content && $tries <= int($total_time / $timeout));
+
+$data{Tries} = $tries;
+
+if (!$content) {
+  exit(2);
+}
+
+# find the now table.
+$indexOfStart = index($content, "<table summary=");
+$indexOfEnd = index($content, "</table>", $indexOfStart);
+
+$_ = substr($content,$indexOfStart,$indexOfEnd - $indexOfStart);
+#print $_;
+
+#s/nbsp;/ /g;
+#s/<.+?>//g;
+#s/\s+/ /g;
+
+#whats on the site vs what do we want to output
+@keys = ("avg_max_temp","avg_min_temp","freq_precip","max_temp","min_temp","max_precip","max_rain","max_snowfall","max_snowOnGround");
+@units = ("&deg;C","&deg;C","%","&deg;C","&deg;C","mm","mm","cm","cm");
+
+$n = 0;
+$indexValue = index($_,"<td headers=\"header1 header", 0);
+for(; $indexValue != -1;)
+{
+   my $indexValueStart = index($_,">",$indexValue)+1;
+   my $indexValueEnd = index($_,$units[$n],$indexValue+2);
+
+   my $temp = "hist_" . $keys[$n];
+   #print "debug: " . $temp . ":" .substr($_,$indexValueStart,$indexValueEnd-$indexValueStart);
+     $data{$temp} = substr($_,$indexValueStart,$indexValueEnd-$indexValueStart);
+
+   #print substr($_,$indexValueStart,$indexValueEnd-$indexValueStart) . "\n";
+   $indexValue = index($_,"<td headers=\"header1 header",$indexValue+1);
+   $n++;
+}
+
+####
+#output both now.
+####
 
 for (keys %data) {
   printf "%s:%s ", $_, $data{$_};
