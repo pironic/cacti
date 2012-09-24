@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+#this file goes in your /scripts/ folder
 use warnings;
 use strict;
 use LWP::Simple;

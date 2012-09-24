@@ -1,4 +1,5 @@
 #!/usr/bin/python
+#this file goes in your /scripts/ folder
 import urllib, urllib2, httplib, sys, getopt
 from xml.dom.minidom import parse, parseString
 
