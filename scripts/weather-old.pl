@@ -96,7 +96,7 @@ $data{WindSpeedAvg} = ($data{WindSpeedHigh} + $data{WindSpeedLow}) / 2;
 #######
 # now for the historical
 #######
-$httpaddr = "http://weather.gc.ca/almanac/almanac_e.html?yyc";
+$httpaddr = "http://www.weatheroffice.gc.ca/almanac/almanac_e.html?yyc";
 my @units;
 
 do{
@@ -116,7 +116,7 @@ if (!$content) {
 }
 
 # find the now table.
-$indexOfStart = index($content, "<table class=");
+$indexOfStart = index($content, "<table summary=");
 $indexOfEnd = index($content, "</table>", $indexOfStart);
 
 $_ = substr($content,$indexOfStart,$indexOfEnd - $indexOfStart);
@@ -131,14 +131,14 @@ $_ = substr($content,$indexOfStart,$indexOfEnd - $indexOfStart);
 @units = ("&deg;C","&deg;C","%","&deg;C","&deg;C","mm","mm","cm","cm");
 
 $n = 0;
-$indexValue = index($_,"<td>", 1);
+$indexValue = index($_,"<td headers=\"header1 header", 0);
 for(; $indexValue != -1;)
 {
    my $indexValueStart = index($_,">",$indexValue)+1;
    my $indexValueEnd = index($_,$units[$n],$indexValue+2);
 
    my $temp = "hist_" . $keys[$n];
-   print "debug: " . $temp . ":" .substr($_,$indexValueStart,$indexValueEnd-$indexValueStart);
+   #print "debug: " . $temp . ":" .substr($_,$indexValueStart,$indexValueEnd-$indexValueStart);
    if ($temp eq "hist_max_snowfall") {
       $data{$temp} = substr($_,$indexValueStart,$indexValueEnd-$indexValueStart) * 10;     
    } elsif ($temp eq "hist_max_snowOnGround") {
@@ -148,7 +148,7 @@ for(; $indexValue != -1;)
    }
 
    #print substr($_,$indexValueStart,$indexValueEnd-$indexValueStart) . "\n";
-   $indexValue = index($_,"<td>",$indexValue+1);
+   $indexValue = index($_,"<td headers=\"header1 header",$indexValue+1);
    $n++;
 }
 

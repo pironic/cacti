@@ -1,5 +1,4 @@
 #!/usr/bin/python
-#this file goes in your /scripts/ folder
 import urllib, urllib2, httplib, sys, getopt
 from xml.dom.minidom import parse, parseString
 
@@ -36,7 +35,7 @@ try:
        listeners = source[n].getElementsByTagName('listeners')[0].firstChild.data
 except IOError, e:
   listeners =  "Error: %s" % e
-
+        
 if (listeners == 1):
   strCurrentListeners = "1 Current Listener"
 else:
@@ -48,3 +47,4 @@ if DEBUG:
   import syslog
   outstr += "(%s)" % file_obj
   syslog.syslog(outstr)
+

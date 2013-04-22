@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-#this file goes in your /scripts/ folder
 use warnings;
 use strict;
 use LWP::Simple;
@@ -42,7 +41,7 @@ my $_ = substr($content,$indexOfStart,$indexOfEnd - $indexOfStart);
 #s/<.+?>//g;
 #s/\s+/ /g;
 
-@keys = ("Temperature","WindDirection","WindSpeedLow","WindSpeedHigh","BaroPressure","Preceipitation","Lightning","QueryTime");
+@keys = ("Temperature","WindDirection","WindSpeedLow","WindSpeedHigh","BaroPressure","Precipitation","Lightning","QueryTime");
 
 my $n = 0;
 my $indexValue = index($_,"<td class=\"value\"", 0);
@@ -97,7 +96,7 @@ $data{WindSpeedAvg} = ($data{WindSpeedHigh} + $data{WindSpeedLow}) / 2;
 #######
 # now for the historical
 #######
-$httpaddr = "http://www.weatheroffice.gc.ca/almanac/almanac_e.html?yyc";
+$httpaddr = "http://weather.gc.ca/almanac/almanac_e.html?id=yyc";
 my @units;
 
 do{
@@ -117,7 +116,7 @@ if (!$content) {
 }
 
 # find the now table.
-$indexOfStart = index($content, "<table summary=");
+$indexOfStart = index($content, "<table class=\"wet-boew-zebra");
 $indexOfEnd = index($content, "</table>", $indexOfStart);
 
 $_ = substr($content,$indexOfStart,$indexOfEnd - $indexOfStart);
@@ -132,18 +131,24 @@ $_ = substr($content,$indexOfStart,$indexOfEnd - $indexOfStart);
 @units = ("&deg;C","&deg;C","%","&deg;C","&deg;C","mm","mm","cm","cm");
 
 $n = 0;
-$indexValue = index($_,"<td headers=\"header1 header", 0);
+$indexValue = index($_,"<tbody>", 1);
 for(; $indexValue != -1;)
 {
-   my $indexValueStart = index($_,">",$indexValue)+1;
+   my $indexValueStart = index($_,"<td",$indexValue)+1;
    my $indexValueEnd = index($_,$units[$n],$indexValue+2);
 
    my $temp = "hist_" . $keys[$n];
-   #print "debug: " . $temp . ":" .substr($_,$indexValueStart,$indexValueEnd-$indexValueStart);
-     $data{$temp} = substr($_,$indexValueStart,$indexValueEnd-$indexValueStart);
+   print "debug: " . $temp . ":" .substr($_,$indexValueStart,$indexValueEnd-$indexValueStart);
+   if ($temp eq "hist_max_snowfall") {
+      $data{$temp} = substr($_,$indexValueStart,$indexValueEnd-$indexValueStart) * 10;     
+   } elsif ($temp eq "hist_max_snowOnGround") {
+      $data{$temp} = substr($_,$indexValueStart,$indexValueEnd-$indexValueStart) * 10;
+   } else {
+      $data{$temp} = substr($_,$indexValueStart,$indexValueEnd-$indexValueStart);
+   }
 
    #print substr($_,$indexValueStart,$indexValueEnd-$indexValueStart) . "\n";
-   $indexValue = index($_,"<td headers=\"header1 header",$indexValue+1);
+   $indexValue = index($_,"</td>",$indexValue+1);
    $n++;
 }
 
