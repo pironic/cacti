@@ -27,7 +27,6 @@ for o, v in opts:
 
 # set the url's we need.
 url_login = mcma + 'data.json?Username='+user+'&Password='+password+'&req=login'
-url_status = mcma + 'data.json?req=getstatus'
 
 # set the headers and url that are required to authenticate... we needs the cookies!
 request_auth = urllib2.Request(url_login)
@@ -47,9 +46,12 @@ except URLError, e:
         print 'ERROR REASON:', e.reason
     sys.exit()
 
+#response = urllib2.urlopen(request_status)
+data = json.loads(response.read())
+url_status = mcma + 'data.json?req=getstatus&MCMASESSIONID='+data['MCMASESSIONID']
+
 request_status = urllib2.Request(url_status)
 request_status.add_header('Accept', 'application/json, text/javascript, */*; q=0.01')
-request_status.add_header('Cookie',response.info()['Set-Cookie'])
 request_status.add_header('User-agent','Cacti-Python AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1')
 
 
