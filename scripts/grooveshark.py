@@ -10,7 +10,7 @@ url = None
 opts, args = getopt.getopt(sys.argv[1:], "u:d:", ["usr=", "debug="])
 for o, v in opts:
     if o in ("-u", "--user"):
-        url = 'http://raptr.com/' + str(v) + '/about'
+        url = 'http://grooveshark.com/#!/' + str(v) + '/broadcast'
     elif o in ("-d", "--debug"):
         DEBUG = True
 if url == None:
@@ -24,24 +24,15 @@ try:
 
     items=dict()
 
+    if DEBUG:
+        print 'read:', data
+	
     ## capture the game count.
-    regex = re.compile(r'\\/games\\">(.*) games<\\/a>')
+    regex = re.compile(r'<span id="listener-count" class="num">(\d*)<\\/span>')
     m = regex.search(data)
     if m:
-        items.update({'games':int(m.group(1).replace(",",""))})
-        
-    ## capture the game hours.
-    regex = re.compile(r'\\/games\\">.*\\/games\\">(.*) hours tracked<\\/a>')
-    m = regex.search(data)
-    if m:
-        items.update({'hours':int(m.group(1).replace(",",""))})
-        
-    ## capture the achievements.
-    regex = re.compile(r'\\/achievements\\">(.*) achievements<\\/a>')
-    m = regex.search(data)
-    if m:
-        items.update({'achievements':int(m.group(1).replace(",",""))})
-        
+        items.update({'listeners':int(m.group(1).replace(",",""))})
+                
 except HTTPError, e:
     if DEBUG:
         print 'ERROR CODE:', e.code
