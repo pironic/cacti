@@ -23,7 +23,7 @@ try:
     data = response.read()
 
     ## capture the temperature.
-    regex = re.compile(r'Temperature<\/td>[^"]*class="value"(?:>| colspan="2">)((?:\d|\.){2,4})<\/td>')
+    regex = re.compile(r'Temperature<\/td>[^"]*class="value"(?:>| colspan="2">)((?:\d|\.){1,4})<\/td>')
     m = regex.search(data)
     if m:
         items.update({'Temperature':float(m.group(1).replace(",",""))})
@@ -55,19 +55,19 @@ try:
         items.update({'WindSpeedAvg':((float(m.group(3).replace(",","")) + float(m.group(2).replace(",",""))) / 2)})
         
     ## capture the baro pressure.
-    regex = re.compile(r'Pressure<\/td>[^"]*class="value"(?:>| colspan="2">)((?:\d|\.){3,5})<\/td>')
+    regex = re.compile(r'Pressure<\/td>[^"]*class="value"(?:>| colspan="2">)((?:\d|\.){2,5})<\/td>')
     m = regex.search(data)
     if m:
         items.update({'BaroPressure':float(m.group(1).replace(",",""))})
         
     ## capture the precipitation.
-    regex = re.compile(r'Precipitation<\/td>[^"]*class="value"(?:>| colspan="2">)((?:\d|\.){3,5})<\/td>')
+    regex = re.compile(r'Precipitation<\/td>[^"]*class="value"(?:>| colspan="2">)((?:\d|\.){2,5})<\/td>')
     m = regex.search(data)
     if m:
         items.update({'Precipitation':float(m.group(1).replace(",",""))})
         
     ## capture the lightning strike count.
-    regex = re.compile(r'Lightning<\/td>[^"]*class="value"(?:>| colspan="2">)((?:\d|\.){3,5})<\/td>')
+    regex = re.compile(r'Lightning<\/td>[^"]*class="value"(?:>| colspan="2">)((?:\d|\.){1,4})<\/td>')
     m = regex.search(data)
     if m:
         items.update({'Lightning':float(m.group(1).replace(",",""))})
@@ -123,25 +123,25 @@ try:
     regex = re.compile(r'Greatest Precipitation [^>]*[^\d]*"(?:header\d{1,2}| )*">((?:\d|\.|-){1,6})')
     m = regex.search(data)
     if m:
-        items.update({'max_precip':float(m.group(1).replace(",",""))})
+        items.update({'hist_max_precip':float(m.group(1).replace(",",""))})
         
     ## capture the max_rain.
     regex = re.compile(r'Greatest Rainfall [^>]*[^\d]*"(?:header\d{1,2}| )*">((?:\d|\.|-){1,6})')
     m = regex.search(data)
     if m:
-        items.update({'max_rain':float(m.group(1).replace(",",""))})
+        items.update({'hist_max_rain':float(m.group(1).replace(",",""))})
         
     ## capture the max_snowfall.
     regex = re.compile(r'Greatest Snowfall [^>]*[^\d]*"(?:header\d{1,2}| )*">((?:\d|\.|-){1,6})')
     m = regex.search(data)
     if m:
-        items.update({'max_snowfall':float(m.group(1).replace(",",""))})
+        items.update({'hist_max_snowfall':float(m.group(1).replace(",",""))})
         
     ## capture the max_snowfall.
     regex = re.compile(r'Most Snow on the Ground [^>]*[^\d]*"(?:header\d{1,2}| )*">((?:\d|\.|-){1,6})')
     m = regex.search(data)
     if m:
-        items.update({'max_snowOnGround':float(m.group(1).replace(",",""))})
+        items.update({'hist_max_snowOnGround':float(m.group(1).replace(",",""))})
         
                 
 except HTTPError, e:
