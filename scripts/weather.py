@@ -23,13 +23,13 @@ try:
     data = response.read()
 
     ## capture the temperature.
-    regex = re.compile(r'Temperature<\/td>[^"]*class="value"(?:>| colspan="2">)((?:\d|\.){1,4})<\/td>')
+    regex = re.compile(r'Temperature<\/td>[^"]*class="value"(?:>| colspan="2">)((?:-|)(?:\d|\.){1,4})<\/td>')
     m = regex.search(data)
     if m:
         items.update({'Temperature':float(m.group(1).replace(",",""))})
         
     ## capture the wind.
-    regex = re.compile(r'Wind<\/td>[^"]*class="value">((?:.|\.){2,3})<\/td>[^\d]*(\d)*<\/td>[^\d]*(\d)*<\/td>')
+    regex = re.compile(r'Wind<\/td>[^"]*class="value">(.{2,3})<\/td>[^\d]*((?:\d|\.)*)<\/td>[^\d]*((?:\d|\.)*)<\/td>')
     m = regex.search(data)
     if m:
         WindDirections = {'N':1,
