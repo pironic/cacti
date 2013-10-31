@@ -18,7 +18,7 @@ sessionID = 'notarealsessionidorsecret'
 secretKey = 'efb0554935f4f1899378697f9fe90a29'
 token = '525e2236b300b'
 userID = 21133592
-broadcastID = '5260c4854570671c0b00000a'
+broadcastID = 'xxx'
 
 items=dict()
 md5 = hashlib.md5()
@@ -247,7 +247,7 @@ except URLError, e:
 if SAVE:
     md5 = hashlib.md5()
     md5.update(userID)
-    request = urllib2.Request(url_scrapper + '?key='+md5.hexdigest())
+    request = urllib2.Request(url_scrapper + '?key='+md5.hexdigest() + '&bcID=' + broadcastID)
     if DEBUG:
         print 'Saving broadcast data to url_scrapper:',url_scrapper + '?key='+md5.hexdigest()
     request.add_data(data)

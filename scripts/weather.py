@@ -90,19 +90,19 @@ try:
     data = response.read()
 
     ## capture the avg_max_temp.
-    regex = re.compile(r'Average Maximum Temperature[^\d]*((?:\d|\.|-){1,4})')
+    regex = re.compile(r'Average Maximum Temperature[^\d]*>((?:\d|\.|-){1,4})')
     m = regex.search(data)
     if m:
         items.update({'hist_avg_max_temp':float(m.group(1).replace(",",""))})
         
     ## capture the max_temp.
-    regex = re.compile(r'Highest Temperature [^>]*[^\d]*((?:\d|\.|-){1,4})')
+    regex = re.compile(r'Highest Temperature [^>]*[^\d]*>((?:\d|\.|-){1,4})')
     m = regex.search(data)
     if m:
         items.update({'hist_max_temp':float(m.group(1).replace(",",""))})
         
     ## capture the avg_min_temp.
-    regex = re.compile(r'Average Minimum Temperature[^\d]*((?:\d|\.|-){1,4})')
+    regex = re.compile(r'Average Minimum Temperature[^\d]*>((?:\d|\.|-){1,4})')
     m = regex.search(data)
     if m:
         items.update({'hist_avg_min_temp':float(m.group(1).replace(",",""))})
@@ -114,7 +114,7 @@ try:
         items.update({'hist_min_temp':float(m.group(1).replace(",",""))})
         
     ## capture the hist_freq_precip.
-    regex = re.compile(r'Frequency of Precipitation[^\d]*((?:\d|\.|-){1,4})')
+    regex = re.compile(r'Frequency of Precipitation[^\d]*>((?:\d|\.|-){1,4})')
     m = regex.search(data)
     if m:
         items.update({'hist_freq_precip':float(m.group(1).replace(",",""))})
