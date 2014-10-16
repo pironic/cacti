@@ -108,7 +108,7 @@ try:
         items.update({'hist_avg_min_temp':float(m.group(1).replace(",",""))})
         
     ## capture the min_temp.
-    regex = re.compile(r'Lowest Temperature [^>]*[^\d]*"(?:header\d| )*">((?:\d|\.|-){1,6})')
+    regex = re.compile(r'Lowest Temperature [^>]*[^\d]*(?:header\d| )*>((?:\d|\.|-){1,6})')
     m = regex.search(data)
     if m:
         items.update({'hist_min_temp':float(m.group(1).replace(",",""))})
@@ -120,25 +120,25 @@ try:
         items.update({'hist_freq_precip':float(m.group(1).replace(",",""))})
         
     ## capture the max_precip.
-    regex = re.compile(r'Greatest Precipitation [^>]*[^\d]*"(?:header\d{1,2}| )*">((?:\d|\.|-){1,6})')
+    regex = re.compile(r'Greatest Precipitation [^>]*[^\d]*(?:header\d{1,2}| )*>((?:\d|\.|-){1,6})')
     m = regex.search(data)
     if m:
         items.update({'hist_max_precip':float(m.group(1).replace(",",""))})
         
     ## capture the max_rain.
-    regex = re.compile(r'Greatest Rainfall [^>]*[^\d]*"(?:header\d{1,2}| )*">((?:\d|\.|-){1,6})')
+    regex = re.compile(r'Greatest Rainfall [^>]*[^\d]*(?:header\d{1,2}| )*>((?:\d|\.|-){1,6})')
     m = regex.search(data)
     if m:
         items.update({'hist_max_rain':float(m.group(1).replace(",",""))})
         
     ## capture the max_snowfall.
-    regex = re.compile(r'Greatest Snowfall [^>]*[^\d]*"(?:header\d{1,2}| )*">((?:\d|\.|-){1,6})')
+    regex = re.compile(r'Greatest Snowfall [^>]*[^\d]*(?:header\d{1,2}| )*>((?:\d|\.|-){1,6})')
     m = regex.search(data)
     if m:
         items.update({'hist_max_snowfall':float(m.group(1).replace(",",""))})
         
     ## capture the max_snowfall.
-    regex = re.compile(r'Most Snow on the Ground [^>]*[^\d]*"(?:header\d{1,2}| )*">((?:\d|\.|-){1,6})')
+    regex = re.compile(r'Most Snow on the Ground [^>]*[^\d]*(?:header\d{1,2}| )*>((?:\d|\.|-){1,6})')
     m = regex.search(data)
     if m:
         items.update({'hist_max_snowOnGround':float(m.group(1).replace(",",""))})
